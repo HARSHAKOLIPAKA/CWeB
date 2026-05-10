@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="chat-container">
+
+    <div class="header">
+
+        <div>
+            Chat App 🔥
+        </div>
+
+        <div>
+            {{ username }} |
+            <a href="/logout">Logout</a>
+        </div>
+
+    </div>
+
+    <div class="messages">
+
+        {% for msg in messages %}
+
+            {% if msg['username'] == username %}
+
+                <div class="message me">
+
+                    <b>You</b><br>
+
+                    {{ msg['message'] }}
+
+                    <div class="time">
+                        {{ msg['time'] }}
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <div class="message other">
+
+                    <b>{{ msg['username'] }}</b><br>
+
+                    {{ msg['message'] }}
+
+                    <div class="time">
+                        {{ msg['time'] }}
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+    <form method="POST" class="input-area">
+
+        <input
+            type="text"
+            name="message"
+            placeholder="Type message..."
+            required
+        >
+
+        <button type="submit">
+            Send
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
