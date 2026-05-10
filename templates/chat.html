@@ -1,80 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Chat App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Realtime Chat</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
 </head>
+
 <body>
 
 <div class="chat-container">
 
-    <div class="header">
-
-        <div>
-            Chat App 🔥
-        </div>
-
-        <div>
-            {{ username }} |
-            <a href="/logout">Logout</a>
-        </div>
-
+    <div class="top-bar">
+        Harsha Chat
     </div>
 
-    <div class="messages">
+    <div class="messages" id="messages"></div>
 
-        {% for msg in messages %}
+    <div class="input-box">
 
-            {% if msg['username'] == username %}
+        <input type="text"
+               id="messageInput"
+               placeholder="Type a message...">
 
-                <div class="message me">
-
-                    <b>You</b><br>
-
-                    {{ msg['message'] }}
-
-                    <div class="time">
-                        {{ msg['time'] }}
-                    </div>
-
-                </div>
-
-            {% else %}
-
-                <div class="message other">
-
-                    <b>{{ msg['username'] }}</b><br>
-
-                    {{ msg['message'] }}
-
-                    <div class="time">
-                        {{ msg['time'] }}
-                    </div>
-
-                </div>
-
-            {% endif %}
-
-        {% endfor %}
-
-    </div>
-
-    <form method="POST" class="input-area">
-
-        <input
-            type="text"
-            name="message"
-            placeholder="Type message..."
-            required
-        >
-
-        <button type="submit">
+        <button onclick="sendMessage()">
             Send
         </button>
 
-    </form>
+    </div>
 
 </div>
+
+<script>
+
+    const socket = io();
+
+    function sendMessage() {
+
+        let input = document.getElementById("messageInput");
+
+        if(input.value.trim() !== "") {
+
+            socket.send(input.value);
+
+            input.value = "";
+
+        }
+    }
+
+    socket.on('message', function(msg){
+
+        let div = document.createElement("div");
+
+        div.className = "message";
+
+        div.innerText = msg;
+
+        document.getElementById("messages").appendChild(div);
+
+        document.getElementById("messages")
+            .scrollTop =
+            document.getElementById("messages")
+            .scrollHeight;
+
+    });
+
+</script>
 
 </body>
 </html>
