@@ -1,1 +1,4 @@
-pip freeze > requirements.txt
+Flask==3.1.0
+Flask-SocketIO==5.5.1
+gunicorn==23.0.0
+eventlet==0.40.0
